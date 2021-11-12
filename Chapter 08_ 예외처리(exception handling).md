@@ -67,3 +67,21 @@ void method() throws Exception1, Exception2, ... ExceptionN {
 
 - JDK1.7부터 try-with-resources문이라는 try-catch문의 변형이 새로 추가되었다.
 - 입출력(I/O)과 관련된 클래스를 사용할 때 유용하다.
+- 사용됐던 자원을 반환하기 위해서 입출력에 사용된 클래스 중 사용한 후에 꼭 닫아 줘야 하는 것들이 있고 finally 블럭 안에 close()를 넣는다.
+문제는 close()가 예외를 발생 시킬 수 있고 이를 해결하기 위해 finally 블럭 안에 try-catch문을 추가해서 close()에서 발생할 수 있는 예외를 처리할 수 있도록 변경한다.
+하지만 코드가 복잡해지면 try블럭과 finally블럭에서 모두 예외가 발생하면, try블럭의 예외는 무시된다.
+이점을 개선하기 위해 try - with - resources문이 추가된 것이다.
+- try - with - resources문의 괄호()안에 객체를 생성하는 문장을 넣으면, 이 객체는 따로 close()를 호출하지 않아도 try블럭을 벗어나는 순간 자동적으로 close()가 호출된다. 그 다음에 catch블럭 또는 finally블럭이 수행된다.
+
+```java
+try (FileInputStream fis = new FileInputStream("score.dat");
+		DataInputStream dis = new DataInputStream(fis)) {
+	while(true) {
+		...
+	}
+} catch (EOFException e) {
+	...
+} catch (EOFException e) {
+	...
+}
+```
